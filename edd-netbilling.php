@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Easy Digital Downloads - Netbilling Payment Gateway Basic
- * Plugin URI: https://qctechjunkie.com
+ * Plugin URI: https://qctechjunkie.com/edd-netbilling-payment-gateway-basic
  * Description: Provides Netbilling Payment Form access for Easy Digital Downloads
  * Version: 1.0.0
  * Copyright: 2019, TechJunkie LLC
