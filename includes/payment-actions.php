@@ -190,7 +190,7 @@ function edd_process_netbilling_pn() {
 
 	if ( strtoupper($verify) != sanitize_text_field( $_POST['Ecom_Ezic_ProofOfPurchase_MD5'] ) ) {
 		edd_debug_log( 'Attempt to verify Netbilling Proof of Purchase Failed' );
-		edd_debug_log( $verify . ' != ' . sanitize_text_field( $_POST['Ecom_Ezic_ProofOfPurchase_MD5'] ) );
+		edd_debug_log( strtoupper($verify) . ' != ' . sanitize_text_field( $_POST['Ecom_Ezic_ProofOfPurchase_MD5'] ) );
 		$payment->add_note( __( 'Proof of Purchase could not be verified.', 'easy-digital-downloads' ) );
 		$payment->status = 'pending';
 		return;
