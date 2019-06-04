@@ -76,9 +76,9 @@ function edd_netbilling_process_payment( $purchase_data ) {
 		$args = array(
 			'Ecom_Ezic_AccountAndSitetag'					=> $account_id . ':' . $site_tag,
 			'Ecom_Cost_Total'      								=> number_format( ( float ) $purchase_data[ 'price' ], 2 ),
-			'Ecom_BillTo_Online_Email'						=> $purchase_data['user_email'],
-			'Ecom_BillTo_Postal_Name_First'				=> $purchase_data['user_info']['first_name'],
-			'Ecom_BillTo_Postal_Name_Last'				=> $purchase_data['user_info']['last_name'],
+			'Ecom_BillTo_Online_Email'						=> sanitize_email( $purchase_data['user_email'] ),
+			'Ecom_BillTo_Postal_Name_First'				=> sanitize_text_field( $purchase_data['user_info']['first_name'] ),
+			'Ecom_BillTo_Postal_Name_Last'				=> sanitize_text_field( $purchase_data['user_info']['last_name'] ),
 			'Ecom_ConsumerOrderID'								=> $payment,
 			'Ecom_Ezic_Fulfillment_ReturnURL'			=> $listener_url,
 			'Ecom_Ezic_Fulfillment_GiveUpURL' 		=> edd_get_failed_transaction_uri( '?payment-id=' . $payment ),
@@ -167,8 +167,6 @@ function edd_process_netbilling_pn() {
 
 	edd_debug_log( 'edd_process_netbilling_ipn() running during Netbilling IPN processing' );
 
-	edd_debug_log( 'Netbilling IPN $_POST: ' . print_r($_POST, true) );
-
 	if( empty( $_POST['Ecom_ConsumerOrderID'] ) ) {
 		return;
 	}
@@ -183,30 +181,35 @@ function edd_process_netbilling_pn() {
 		return; // Only complete payments once
 	}
 
-	$verify = md5( $integrity_key . $_POST['Ecom_Ezic_Response_TransactionID'] . $_POST['Ecom_Ezic_Response_StatusCode'] . $_POST['Ecom_Ezic_AccountAndSitetag'] . $_POST['Ecom_Cost_Total'] . $_POST['Ecom_ConsumerOrderID'] );
+	$verify = md5( $integrity_key
+		. $_POST['Ecom_Ezic_Response_TransactionID']
+		. $_POST['Ecom_Ezic_Response_StatusCode']
+		. $_POST['Ecom_Ezic_AccountAndSitetag']
+		. $_POST['Ecom_Cost_Total']
+		. $_POST['Ecom_ConsumerOrderID'] );
 
 	if ( strtoupper($verify) != $_POST['Ecom_Ezic_ProofOfPurchase_MD5'] ) {
 		edd_debug_log( 'Attempt to verify Netbilling Proof of Purchase Failed' );
-		edd_debug_log( $verify . ' != ' . $_POST['Ecom_Ezic_ProofOfPurchase_MD5'] );
+		edd_debug_log( $verify . ' != ' . sanitize_text_field( $_POST['Ecom_Ezic_ProofOfPurchase_MD5'] ) );
 		$payment->add_note( __( 'Proof of Purchase could not be verified.', 'easy-digital-downloads' ) );
 		$payment->status = 'pending';
 		return;
 	}
 
-	$payment_status = $_POST['Ecom_Ezic_Response_StatusCode'];
+	$payment_status = sanitize_text_field( $_POST['Ecom_Ezic_Response_StatusCode'] );
 
 	if ( ( '0' == $payment_status || 'F' == $payment_status ) && isset( $_POST['Ecom_Ezic_Response_AuthMessage'] ) ) {
 		edd_debug_log( 'Payment not marked as completed' );
 		$payment->status = 'failed';
-		$payment->transaction_id = sanitize_text_field( $_POST['Ecom_Ezic_Response_TransactionID'] );
-		$payment->add_note( __( 'Payment declined or failed. Response message: ' . $_POST['Ecom_Ezic_Response_AuthMessage'], 'easy-digital-downloads' ) );
+		$payment->transaction_id = sanitize_text_field( $_POST['Ecom_Ezic_Response_TransactionID'] ) );
+		$payment->add_note( __( 'Payment declined or failed. Response message: ' . sanitize_text_field( $_POST['Ecom_Ezic_Response_AuthMessage'] ), 'easy-digital-downloads' ) );
 		$payment->save();
 
 		wp_redirect( edd_get_failed_transaction_uri( ) );
 	} else {
 		edd_debug_log( 'Payment marked as completed' );
-		$payment->add_note( sprintf( __( 'Netbilling Transaction ID: %s', 'easy-digital-downloads' ) , $_POST['Ecom_Ezic_Response_TransactionID'] ) );
-		$payment->transaction_id = sanitize_text_field( $_POST['Ecom_Ezic_Response_TransactionID'] );
+		$payment->add_note( sprintf( __( 'Netbilling Transaction ID: %s', 'easy-digital-downloads' ) , sanitize_text_field( $_POST['Ecom_Ezic_Response_TransactionID'] ) ) );
+		$payment->transaction_id = sanitize_text_field( $_POST['Ecom_Ezic_Response_TransactionID'] ) );
 		$payment->status = 'complete';
 		$payment->save();
 
