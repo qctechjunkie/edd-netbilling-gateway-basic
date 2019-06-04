@@ -182,13 +182,13 @@ function edd_process_netbilling_pn() {
 	}
 
 	$verify = md5( $integrity_key
-		. $_POST['Ecom_Ezic_Response_TransactionID']
-		. $_POST['Ecom_Ezic_Response_StatusCode']
-		. $_POST['Ecom_Ezic_AccountAndSitetag']
-		. $_POST['Ecom_Cost_Total']
-		. $_POST['Ecom_ConsumerOrderID'] );
+		. sanitize_text_field( $_POST['Ecom_Ezic_Response_TransactionID'] )
+		. sanitize_text_field( $_POST['Ecom_Ezic_Response_StatusCode'] )
+		. sanitize_text_field( $_POST['Ecom_Ezic_AccountAndSitetag'] )
+		. sanitize_text_field( $_POST['Ecom_Cost_Total'] )
+		. sanitize_text_field( $_POST['Ecom_ConsumerOrderID'] ) );
 
-	if ( strtoupper($verify) != $_POST['Ecom_Ezic_ProofOfPurchase_MD5'] ) {
+	if ( strtoupper($verify) != sanitize_text_field( $_POST['Ecom_Ezic_ProofOfPurchase_MD5'] ) ) {
 		edd_debug_log( 'Attempt to verify Netbilling Proof of Purchase Failed' );
 		edd_debug_log( $verify . ' != ' . sanitize_text_field( $_POST['Ecom_Ezic_ProofOfPurchase_MD5'] ) );
 		$payment->add_note( __( 'Proof of Purchase could not be verified.', 'easy-digital-downloads' ) );
