@@ -201,7 +201,7 @@ function edd_process_netbilling_pn() {
 	if ( ( '0' == $payment_status || 'F' == $payment_status ) && isset( $_POST['Ecom_Ezic_Response_AuthMessage'] ) ) {
 		edd_debug_log( 'Payment not marked as completed' );
 		$payment->status = 'failed';
-		$payment->transaction_id = sanitize_text_field( $_POST['Ecom_Ezic_Response_TransactionID'] ) );
+		$payment->transaction_id = sanitize_text_field( $_POST['Ecom_Ezic_Response_TransactionID'] );
 		$payment->add_note( __( 'Payment declined or failed. Response message: ' . sanitize_text_field( $_POST['Ecom_Ezic_Response_AuthMessage'] ), 'easy-digital-downloads' ) );
 		$payment->save();
 
@@ -209,7 +209,7 @@ function edd_process_netbilling_pn() {
 	} else {
 		edd_debug_log( 'Payment marked as completed' );
 		$payment->add_note( sprintf( __( 'Netbilling Transaction ID: %s', 'easy-digital-downloads' ) , sanitize_text_field( $_POST['Ecom_Ezic_Response_TransactionID'] ) ) );
-		$payment->transaction_id = sanitize_text_field( $_POST['Ecom_Ezic_Response_TransactionID'] ) );
+		$payment->transaction_id = sanitize_text_field( $_POST['Ecom_Ezic_Response_TransactionID'] );
 		$payment->status = 'complete';
 		$payment->save();
 
