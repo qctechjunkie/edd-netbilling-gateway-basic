@@ -5,7 +5,7 @@
  * Description: Provides Netbilling Payment Form access for Easy Digital Downloads
  * Version: 1.0.0
  * Copyright: 2019, TechJunkie LLC
- * Author: TechJunkie LLC
+ * Author: QCTechJunkie
  * Author URI: https://qctechjunkie.com
  *
  * Netbilling Payment Gateway Basic for EDD is free software: you can redistribute it and/or modify
