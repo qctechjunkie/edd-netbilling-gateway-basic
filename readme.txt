@@ -25,7 +25,7 @@ Accept all Major Credit Cards / Debit Cards permitted by your merchant account â
 Netbilling 24 hour call center support
 Accept international transactions from customers worldwide
 Want More?
-Check out the pro version of Easy Digital Downloads Netbilling Payment Gateway
+Check out the pro version of [Easy Digital Downloads Netbilling Gateway](https://qctechjunkie.com/downloads/edd-netbilling-payment-gateway/)
 
 = Pro Version Features =
 * No Redirects - Customers stay on the merchants site, no payment forms or redirects
@@ -54,7 +54,7 @@ Contribute on [GitHub](https://github.com/qctechjunkie/edd-netbilling-gateway-ba
 
 = Are recurring payments supported? =
 
-No, you will need to purchase the Pro version of the Easy Digital Downloads Netbilling Gateway(https://qctechjunkie.com/downloads/edd-netbilling-payment-gateway/).
+No, you will need to purchase the Pro version of the [Easy Digital Downloads Netbilling Gateway](https://qctechjunkie.com/downloads/edd-netbilling-payment-gateway/).
 
 == Changelog ==
 
